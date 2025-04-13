@@ -6,8 +6,8 @@ plugins {
 
 android {
     namespace = "com.example.image2text"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdkVersion(35)
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -20,19 +20,27 @@ android {
 
     defaultConfig {
         applicationId = "com.example.image2text"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        minSdkVersion(21)
+        targetSdkVersion(35)
+        versionCode = 1
+        versionName = "1.0"
     }
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("debug")
         }
     }
 }
-
+dependencies {
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:16.2.0")
+}
 flutter {
     source = "../.."
 }
