@@ -16,6 +16,9 @@ dependencies:
   permission_handler: ^12.0.0+1
   very_good_analysis: ^7.0.0
   modal_progress_hud_nsn: ^0.5.1
+  camera: ^0.11.1
+  image: ^4.5.4
+  path_provider: ^2.1.5
 
 
 dev_dependencies:
