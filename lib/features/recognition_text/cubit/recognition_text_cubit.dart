@@ -19,7 +19,7 @@ class RecognitionTextCubit extends Cubit<RecognitionTextState> {
     emit(PickImageLoading());
     try {
       final pickedFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
+        source: ImageSource.camera,
       );
 
       imageFile = File(pickedFile!.path);
