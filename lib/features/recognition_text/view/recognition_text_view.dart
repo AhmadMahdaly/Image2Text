@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image2text/features/recognition_text/cubit/recognition_text_cubit.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_extracted_text.dart';
-import 'package:image2text/features/recognition_text/widgets/recognition_pick_image.dart';
+import 'package:image2text/features/recognition_text/widgets/recognition_pick_image/recognition_pick_image.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_title.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
