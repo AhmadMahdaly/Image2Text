@@ -9,7 +9,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<RecognitionTextCubit>(
       create: (context) => RecognitionTextCubit(),
-      child: const MaterialApp(home: RecognitionTextScreen()),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: RecognitionTextScreen(),
+      ),
     );
   }
 }

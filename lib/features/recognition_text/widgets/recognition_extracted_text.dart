@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image2text/features/recognition_text/cubit/recognition_text_cubit.dart';
+import 'package:image2text/features/recognition_text/widgets/custom_button.dart';
+import 'package:translator/translator.dart';
 
 class RecognitionExtractedText extends StatefulWidget {
   const RecognitionExtractedText({super.key});
@@ -11,6 +14,24 @@ class RecognitionExtractedText extends StatefulWidget {
 }
 
 class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
+  String translatedText = '';
+  final translator = GoogleTranslator();
+
+  Future<void> translateText() async {
+    final input = _controller.text.trim();
+    if (input.isNotEmpty) {
+      final translation = await translator.translate(
+        input,
+        from: 'en',
+        to: 'ar',
+      );
+      setState(() {
+        translatedText = translation.text;
+      });
+    }
+  }
+
+  ///
   final TextEditingController _controller = TextEditingController();
   @override
   void dispose() {
@@ -18,6 +39,7 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
     _controller.dispose();
   }
 
+  bool isActive = false;
   @override
   Widget build(BuildContext context) {
     return BlocListener<RecognitionTextCubit, RecognitionTextState>(
@@ -26,35 +48,115 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
           setState(() {
             _controller.text =
                 BlocProvider.of<RecognitionTextCubit>(context).extractedText;
+            isActive = true;
           });
         }
       },
-      child: TextField(
-        controller: _controller,
-        onChanged: (extractedText) {
-          setState(() {
-            extractedText =
-                BlocProvider.of<RecognitionTextCubit>(context).extractedText;
-          });
-        },
-        readOnly: true,
-        maxLines: 7,
-        decoration: InputDecoration(
-          hintText: 'Extracted text will appear here...',
-          hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey[400] ?? Colors.grey),
+      child: Column(
+        children: [
+          TextField(
+            controller: _controller,
+            onChanged: (extractedText) {
+              setState(() {
+                extractedText =
+                    BlocProvider.of<RecognitionTextCubit>(
+                      context,
+                    ).extractedText;
+              });
+            },
+            readOnly: true,
+            maxLines: 14,
+            decoration: InputDecoration(
+              hintText: 'Extracted text will appear here...',
+              hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey[400] ?? Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey[400] ?? Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey[400] ?? Colors.grey),
+              ),
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey[400] ?? Colors.grey),
+          const Spacer(),
+
+          CustomButton(
+            isActive: isActive,
+            text: 'TRANSLATE',
+            onTap: () async {
+              await translateText();
+              await showModalBottomSheet<String>(
+                isDismissible: true,
+                backgroundColor: Colors.brown[50],
+                enableDrag: true,
+                useRootNavigator: true,
+                showDragHandle: true,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                context: context,
+                builder: (context) {
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: translatedText),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Text copied to clipboard!',
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.copy),
+                              ),
+
+                              const Text(
+                                'Translated Text',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                icon: const Icon(Icons.close),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            child: Text(
+                              translatedText,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey[400] ?? Colors.grey),
-          ),
-        ),
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }

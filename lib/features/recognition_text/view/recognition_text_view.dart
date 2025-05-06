@@ -66,9 +66,8 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
               spacing: 18,
               children: [
                 RecognitionTitle(),
-                SizedBox(height: 16),
                 RecognitionPickImage(),
-                RecognitionExtractedText(),
+                Expanded(child: RecognitionExtractedText()),
               ],
             ),
           ),
