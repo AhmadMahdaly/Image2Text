@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
             decoration: ShapeDecoration(
               color: Colors.brown,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: Text(
@@ -47,7 +47,7 @@ class CustomButton extends StatelessWidget {
                   color: Colors.grey[400] ?? Colors.grey,
                   width: 1.5,
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: Text(

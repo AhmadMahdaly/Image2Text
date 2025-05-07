@@ -14,28 +14,26 @@ class RecognitionPickImage extends StatelessWidget {
           onTap: cubit.pickImage,
           child: Container(
             width: double.infinity,
+            clipBehavior: Clip.antiAlias,
             height: 60,
             decoration: BoxDecoration(
+              color: Colors.brown,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.brown),
             ),
-            child:
-                cubit.imageFile != null
-                    ? Image.file(cubit.imageFile!, fit: BoxFit.cover)
-                    : const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Row(
-                        spacing: 12,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.image_rounded, color: Colors.brown),
-                          Text(
-                            'Upload an image to extract text.',
-                            style: TextStyle(fontSize: 16, color: Colors.brown),
-                          ),
-                        ],
-                      ),
-                    ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                spacing: 12,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.image_rounded, color: Colors.white),
+                  Text(
+                    'Upload an image to extract text.',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },

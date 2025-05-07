@@ -50,7 +50,11 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
         appBar: AppBar(
           title: const Text(
             'Image2Text',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown,
+            ),
           ),
         ),
         body: ModalProgressHUD(

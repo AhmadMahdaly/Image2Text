@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 
 part 'recognition_text_state.dart';
 
@@ -22,10 +23,33 @@ class RecognitionTextCubit extends Cubit<RecognitionTextState> {
         source: ImageSource.camera,
       );
 
-      imageFile = File(pickedFile!.path);
-      inputImage = InputImage.fromFilePath(pickedFile.path);
+      if (pickedFile == null) {
+        emit(PickImageError('No image selected'));
+        return;
+      }
 
-      // Call this method to extract text from the image
+      // Crop the image
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crrp Image',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            lockAspectRatio: false,
+          ),
+        ],
+      );
+
+      if (croppedFile == null) {
+        emit(PickImageError('Cropped image is null'));
+        return;
+      }
+
+      imageFile = File(croppedFile.path);
+      inputImage = InputImage.fromFilePath(imageFile!.path);
+
       await prcessImage(inputImage!);
       emit(PickImageSuccess());
     } catch (e) {

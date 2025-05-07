@@ -64,8 +64,8 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
                     ).extractedText;
               });
             },
-            readOnly: true,
-            maxLines: 14,
+
+            maxLines: 16,
             decoration: InputDecoration(
               hintText: 'Extracted text will appear here...',
               hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
@@ -91,6 +91,7 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
             onTap: () async {
               await translateText();
               await showModalBottomSheet<String>(
+                useSafeArea: true,
                 isDismissible: true,
                 backgroundColor: Colors.brown[50],
                 enableDrag: true,
@@ -155,7 +156,7 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
               );
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
         ],
       ),
     );
