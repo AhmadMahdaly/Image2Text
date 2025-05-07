@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image2text/core/constans.dart';
 import 'package:image2text/features/recognition_text/cubit/recognition_text_cubit.dart';
 import 'package:image2text/features/recognition_text/widgets/custom_button.dart';
-import 'package:translator/translator.dart';
 
 class RecognitionExtractedText extends StatefulWidget {
   const RecognitionExtractedText({super.key});
@@ -14,24 +14,6 @@ class RecognitionExtractedText extends StatefulWidget {
 }
 
 class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
-  String translatedText = '';
-  final translator = GoogleTranslator();
-
-  Future<void> translateText() async {
-    final input = _controller.text.trim();
-    if (input.isNotEmpty) {
-      final translation = await translator.translate(
-        input,
-        from: 'en',
-        to: 'ar',
-      );
-      setState(() {
-        translatedText = translation.text;
-      });
-    }
-  }
-
-  ///
   final TextEditingController _controller = TextEditingController();
   @override
   void dispose() {
@@ -89,7 +71,9 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
             isActive: isActive,
             text: 'TRANSLATE',
             onTap: () async {
-              await translateText();
+              final translate = await BlocProvider.of<RecognitionTextCubit>(
+                context,
+              ).translateWithGPT(_controller.text, 'Arabic', apiKey, context);
               await showModalBottomSheet<String>(
                 useSafeArea: true,
                 isDismissible: true,
@@ -115,7 +99,7 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
                               IconButton(
                                 onPressed: () {
                                   Clipboard.setData(
-                                    ClipboardData(text: translatedText),
+                                    ClipboardData(text: translate.toString()),
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -144,7 +128,7 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
                           const SizedBox(height: 16),
                           SizedBox(
                             child: Text(
-                              translatedText,
+                              translate.toString(),
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),
