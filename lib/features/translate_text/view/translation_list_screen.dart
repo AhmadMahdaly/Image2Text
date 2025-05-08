@@ -15,24 +15,24 @@ class TranslationListScreen extends StatefulWidget {
 }
 
 class _TranslationListScreenState extends State<TranslationListScreen> {
+  Map<String, double> scrollOffsets = {}; // مفتاحها اسم المجلد أو ID
+
   late ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    final box = Hive.box<double>('settings');
 
-    // استرجاع الموضع المحفوظ
-    final lastOffset = Hive.box<double>(
-      'settings',
-    ).get('lastScrollOffset', defaultValue: 0);
+    final folderId = widget.folder.key.toString(); // أو folder.name
+    final lastOffset = box.get('scroll_$folderId', defaultValue: 0.0);
+
     _scrollController = ScrollController(
       initialScrollOffset: lastOffset ?? 0.0,
     );
 
     _scrollController.addListener(() {
-      Hive.box<double>(
-        'settings',
-      ).put('lastScrollOffset', _scrollController.offset);
+      box.put('scroll_$folderId', _scrollController.offset);
     });
   }
 
