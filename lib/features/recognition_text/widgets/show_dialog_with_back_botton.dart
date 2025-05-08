@@ -5,11 +5,31 @@ Future<String?> showDialogWithBackButton(BuildContext context, String text) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text(text),
+        title: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown,
+          ),
+        ),
         actions: [
-          TextButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.brown,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Ok'),
+            child: const Text(
+              'Ok',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       );

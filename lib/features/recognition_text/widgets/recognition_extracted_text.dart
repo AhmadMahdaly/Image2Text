@@ -35,8 +35,11 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
           });
         }
       },
-      child: SingleChildScrollView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height - 200,
+        width: double.infinity,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: _controller,
@@ -47,16 +50,32 @@ class _RecognitionExtractedTextState extends State<RecognitionExtractedText> {
                   isActive = _controller.text.isNotEmpty;
                 });
               },
-              maxLines: 16,
+              maxLines: 10,
+              cursorWidth: 0.7,
               decoration: InputDecoration(
                 hintText: 'Extracted text will appear here...',
                 hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
-                enabledBorder: customBorderRadius(),
-                focusedBorder: customBorderRadius(),
-                border: customBorderRadius(),
+                enabledBorder:
+                    _controller.text.isEmpty
+                        ? customBorderRadius()
+                        : OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Colors.brown,
+                            width: 2,
+                          ),
+                        ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.brown, width: 2),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.brown, width: 2),
+                ),
               ),
             ),
-            const SizedBox(height: 18),
+            const Spacer(),
             CustomButton(
               isActive: isActive,
               text: 'TRANSLATE',

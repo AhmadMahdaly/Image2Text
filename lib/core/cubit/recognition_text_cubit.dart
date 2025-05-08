@@ -39,11 +39,12 @@ class TextCubit extends Cubit<TextState> {
 
       // Crop the image
       final croppedFile = await ImageCropper().cropImage(
+        compressQuality: 100,
         sourcePath: pickedFile.path,
-        aspectRatio: const CropAspectRatio(ratioX: 2, ratioY: 3),
         uiSettings: [
           AndroidUiSettings(
-            toolbarTitle: 'Crop Image',
+            toolbarTitle: 'Keep your text clear and readable',
+
             toolbarColor: Colors.white,
             toolbarWidgetColor: Colors.brown,
             lockAspectRatio: false,
@@ -112,7 +113,8 @@ class TextCubit extends Cubit<TextState> {
       );
     }
     final prompt =
-        'ترجم النص التالي إلى العربية ترجمة أدبية غير حرفية، بحيث تكون مفهومة وسلسة للقارئ العربي، وتعكس المعنى والسياق الأصلي بأسلوب واضح وجذاب. إذا كان النص المرسل غير مكتمل أو يتوقف عند نهاية غير نهائية، فاختم الترجمة بجملة تمهيدية تربط نهاية النص بما سيليه، دون اختلاق أحداث غير موجودة.. والتزم فقط بالنص دون اي حديث غيره.\n\n"$text"';
+        'سأرسل لك هنا نصا..\nترجم النص التالي إلى العربية ترجمة أدبية غير حرفية، بحيث تكون مفهومة وسلسة للقارئ العربي، وتعكس المعنى والسياق الأصلي بأسلوب واضح وجذاب. إذا كان آخر سطر من النص غير مكتمل أو يتوقف عند نهاية غير نهائية، فلا تترجمه إلا في الرسالة التالية إذا وجدتها تكمل السطر. بحيث تربط نهاية النص بما سيليه، دون اختلاق أحداث غير موجودة.. والتزم فقط بالنص المرسل إليك دون اي حديث غيره.\n\n"$text"';
+    //   'ترجم النص التالي إلى العربية ترجمة أدبية غير حرفية، بحيث تكون مفهومة وسلسة للقارئ العربي، وتعكس المعنى والسياق الأصلي بأسلوب واضح وجذاب. إذا كان النص المرسل غير مكتمل أو يتوقف عند نهاية غير نهائية، فاختم الترجمة بجملة تمهيدية تربط نهاية النص بما سيليه، دون اختلاق أحداث غير موجودة.. والتزم فقط بالنص دون اي حديث غيره.\n\n"$text"';
     // 'Translate the following text from English to Arabic. Keep the meaning accurate and use natural $targetLang: \n\n"$text"';
     // 'Translate the following casual conversation into natural spoken $targetLang: \n\n"$text"';
     // 'Translate the following educational content to Arabic in a formal and academic tone. Ensure the meaning is accurate, especially for technical or scientific terms. Do not summarize or skip anything.\n\n"$text"';
@@ -271,7 +273,7 @@ class TextCubit extends Cubit<TextState> {
                   ),
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text(
-                    'Save',
+                    'Delete',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -323,15 +325,29 @@ class TextCubit extends Cubit<TextState> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Rename Folder'),
+          title: const Text(
+            'Rename Folder',
+            style: TextStyle(
+              color: Colors.brown,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(labelText: 'New Folder Name'),
+            decoration: InputDecoration(
+              border: customBorderRadius(),
+              focusedBorder: customBorderRadius(),
+              enabledBorder: customBorderRadius(),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.brown),
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -364,7 +380,8 @@ class TextCubit extends Cubit<TextState> {
                 emit(RenameFolderSuccess());
                 Navigator.of(context).pop();
               },
-              child: const Text('Save'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -375,31 +392,47 @@ class TextCubit extends Cubit<TextState> {
   ///
   Future<void> deleteFolder(FolderModel folder, BuildContext context) async {
     emit(DeleteFolderLoading());
-    if (folder.translations != null) {
-      for (final translation in folder.translations!) {
-        await translation.delete();
-      }
-    }
     final confirm = await showDialog<bool>(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Confirm Delete'),
-            content: const Text('Are you sure you want to delete this folder?'),
+            title: const Text(
+              'Confirm Delete',
+              style: TextStyle(
+                color: Colors.brown,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: const Text(
+              'Are you sure you want to delete this folder with all translations in?',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Cancel'),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.brown),
+                ),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Save'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
     );
 
     if (confirm == true) {
+      if (folder.translations != null) {
+        for (final translation in folder.translations!) {
+          await translation.delete();
+        }
+      }
       await folder.delete();
       emit(DeleteFolderSuccess());
     }

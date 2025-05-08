@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image2text/core/cubit/recognition_text_cubit.dart';
+import 'package:image2text/core/utils/shared_widgets/app_indecator.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_extracted_text.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_pick_image.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_title.dart';
 import 'package:image2text/features/recognition_text/widgets/show_dialog_with_back_botton.dart';
-import 'package:image2text/features/translate_text/view/folders_page.dart';
+import 'package:image2text/features/translate_text/view/saved_folders_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RecognitionTextScreen extends StatefulWidget {
@@ -50,13 +51,15 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FoldersPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const SavedFoldersPage(),
+                  ),
                 );
               },
               icon: const Icon(
                 Icons.folder_outlined,
                 color: Colors.brown,
-                size: 32,
+                size: 24,
               ),
             ),
             const SizedBox(width: 10),
@@ -67,17 +70,19 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
           opacity: 1,
           blur: 1,
           color: Colors.transparent,
-          progressIndicator: const Center(child: CircularProgressIndicator()),
+          progressIndicator: const AppIndicator(),
           child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 18,
-              children: [
-                RecognitionTitle(),
-                RecognitionPickImage(),
-                Expanded(child: RecognitionExtractedText()),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 18,
+                children: [
+                  RecognitionTitle(),
+                  RecognitionPickImage(),
+                  RecognitionExtractedText(),
+                ],
+              ),
             ),
           ),
         ),

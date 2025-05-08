@@ -41,7 +41,6 @@ class _TranslationDetailScreenState extends State<TranslationDetailScreen> {
         final cubit = context.read<TextCubit>();
         return Scaffold(
           appBar: AppBar(
-            toolbarHeight: 80,
             centerTitle: true,
             title: Text(
               t.title ?? 'No Title',

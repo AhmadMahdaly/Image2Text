@@ -15,7 +15,7 @@ void main() async {
 
   await Hive.openBox<FolderModel>('folders');
   await Hive.openBox<TranslationModel>('translations');
-
+  await Hive.openBox<double>('settings');
   await requestCameraPermission();
   runApp(const MyApp());
 }
