@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image2text/core/cubit/recognition_text_cubit.dart';
-import 'package:image2text/features/history_page/view/folders_page.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_extracted_text.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_pick_image.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_title.dart';
 import 'package:image2text/features/recognition_text/widgets/show_dialog_with_back_botton.dart';
+import 'package:image2text/features/translate_text/view/folders_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RecognitionTextScreen extends StatefulWidget {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:image2text/core/cubit/recognition_text_cubit.dart';
-import 'package:image2text/features/history_page/view/translation_list_screen.dart';
 import 'package:image2text/features/translate_text/model/folder_model/folder_model.dart';
+import 'package:image2text/features/translate_text/view/translation_list_screen.dart';
 
 class FoldersPage extends StatefulWidget {
   const FoldersPage({super.key});

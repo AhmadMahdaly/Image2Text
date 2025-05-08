@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image2text/features/history_page/widgets/save_translation_dialog.dart';
+import 'package:image2text/features/translate_text/widgets/save_translation_dialog.dart';
 
 class TranslatePage extends StatelessWidget {
   const TranslatePage({required this.translate, super.key});

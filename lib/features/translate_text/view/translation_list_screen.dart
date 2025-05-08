@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image2text/core/cubit/recognition_text_cubit.dart';
-import 'package:image2text/features/history_page/widgets/translation_detail_screen.dart';
 import 'package:image2text/features/translate_text/model/folder_model/folder_model.dart';
 import 'package:image2text/features/translate_text/model/translation_model/translation_model.dart';
+import 'package:image2text/features/translate_text/widgets/translation_detail_screen.dart';
 
 class TranslationListScreen extends StatelessWidget {
   const TranslationListScreen({required this.folder, super.key});
@@ -15,6 +15,7 @@ class TranslationListScreen extends StatelessWidget {
     return BlocBuilder<TextCubit, TextState>(
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: Colors.brown[100],
           appBar: AppBar(
             backgroundColor: Colors.brown,
             toolbarHeight: 100,
