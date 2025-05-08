@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image2text/features/recognition_text/cubit/recognition_text_cubit.dart';
+import 'package:image2text/core/cubit/recognition_text_cubit.dart';
+import 'package:image2text/features/history_page/view/folders_page.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_extracted_text.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_pick_image.dart';
 import 'package:image2text/features/recognition_text/widgets/recognition_title.dart';
+import 'package:image2text/features/recognition_text/widgets/show_dialog_with_back_botton.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RecognitionTextScreen extends StatefulWidget {
@@ -16,7 +18,7 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
   bool _isInAsyncCall = false;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RecognitionTextCubit, RecognitionTextState>(
+    return BlocListener<TextCubit, TextState>(
       listener: (context, state) {
         if (state is PickImageLoading || state is ExtractedTextLoading) {
           setState(() {
@@ -26,24 +28,11 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
           setState(() {
             _isInAsyncCall = false;
           });
-        } else {
+        } else if (state is PickImageError || state is ExtractedTextError) {
           setState(() {
             _isInAsyncCall = false;
+            showDialogWithBackButton(context, 'No text recognition!');
           });
-          showDialog<String>(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('No text recognition!'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Ok'),
-                  ),
-                ],
-              );
-            },
-          );
         }
       },
       child: Scaffold(
@@ -56,6 +45,22 @@ class _RecognitionTextScreenState extends State<RecognitionTextScreen> {
               color: Colors.brown,
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FoldersPage()),
+                );
+              },
+              icon: const Icon(
+                Icons.folder_outlined,
+                color: Colors.brown,
+                size: 32,
+              ),
+            ),
+            const SizedBox(width: 10),
+          ],
         ),
         body: ModalProgressHUD(
           inAsyncCall: _isInAsyncCall,

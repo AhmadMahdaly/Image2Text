@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image2text/features/recognition_text/cubit/recognition_text_cubit.dart';
+import 'package:image2text/core/cubit/recognition_text_cubit.dart';
 
 class RecognitionPickImage extends StatelessWidget {
   const RecognitionPickImage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecognitionTextCubit, RecognitionTextState>(
+    return BlocBuilder<TextCubit, TextState>(
       builder: (context, state) {
-        final cubit = context.read<RecognitionTextCubit>();
+        final cubit = context.read<TextCubit>();
         return InkWell(
           onTap: cubit.pickImage,
           child: Container(
